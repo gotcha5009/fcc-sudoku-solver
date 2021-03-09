@@ -123,19 +123,15 @@ class SudokuSolver {
     try {
       let solutionArray = [...puzzleString];
       for (let i = 0; i < solutionArray.length; i++) {
-        const coordinate = this.coordination[i];
-        const row = coordinate.charAt(0);
-        const col = coordinate.charAt(1);
-        if (solutionArray[i] == '.') {
+
+        if (puzzleString[i] == '.') {
           for (let j = 1; j <= 9; j++) {
+            const coordinate = this.coordination[i];
+            const row = coordinate.charAt(0);
+            const col = coordinate.charAt(1);
             const rowValid = this.checkRowPlacement(solutionArray.join(''), row, col, j);
             const colValid = this.checkColPlacement(solutionArray.join(''), row, col, j);
             const regionValid = this.checkRegionPlacement(solutionArray.join(''), row, col, j);
-
-            // console.log('rowValid:', rowValid);
-            // console.log('colValid:', colValid);
-            // console.log('regionValid:', regionValid);
-
 
             if (rowValid && colValid && regionValid) {
               solutionArray[i] = j;
@@ -144,15 +140,40 @@ class SudokuSolver {
               // need to backtrack from here
               // decrease i by 1 until found previous .
               // then make j choose next solution instead of current solution
-              // if that can't solve it again, redo the steps until we can't increment the first one  
-              console.log(solutionArray);
-              console.log("element:", solutionArray[i], "\n", "index:", i);
-              return { "error": "Puzzle cannot be solved" };
+              // if that can't solve it again, redo the steps until we can't increment the first one
+
+              //  situation: current position cannot be fitted with any numbers(1-9)
+              //  so you need to move backward until you find previous solution and increment it by 1
+
+              //  everytime you move backward, make sure solutionArray is also in the previous state
+              console.log('backtracking...');
+              while (i != 0) {
+                i--;
+                if (puzzleString[i] == '.') {
+                  //console.log('now we are at index:', i);
+                  //console.log('previous solution:', solutionArray[i]);
+                  j = solutionArray[i];
+                  if (j == 9) {
+                    continue;
+                  } else {
+                    solutionArray = solutionArray.slice(0, i + 1).concat([...puzzleString.slice(i + 1)]);
+                    break;
+                  }
+                }
+              }
+              if (i == 0) {
+                return { "error": "Puzzle cannot be solved" };
+              } else {
+                continue;
+              }
             } else {
               continue;
             }
           }
         } else {
+          const coordinate = this.coordination[i];
+          const row = coordinate.charAt(0);
+          const col = coordinate.charAt(1);
           const rowValid = this.checkRowPlacement(solutionArray.join(''), row, col, solutionArray[i]);
           const colValid = this.checkColPlacement(solutionArray.join(''), row, col, solutionArray[i]);
           const regionValid = this.checkRegionPlacement(solutionArray.join(''), row, col, solutionArray[i]);

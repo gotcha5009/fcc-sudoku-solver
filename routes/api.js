@@ -52,27 +52,27 @@ module.exports = function (app) {
       }
     });
 
-  app.route('/api/checkValid')
-    .post((req, res) => {
-      const result = solver.validate(req.body.puzzle);
-      res.send(result);
-    });
+  // app.route('/api/checkValid')
+  //   .post((req, res) => {
+  //     const result = solver.validate(req.body.puzzle);
+  //     res.send(result);
+  //   });
 
-  app.route('/api/checkRow')
-    .post((req, res) => {
-      const result = solver.checkRowPlacement(req.body.puzzle, req.body.row, req.body.column, req.body.value);
-      res.send(result);
-    });
+  // app.route('/api/checkRow')
+  //   .post((req, res) => {
+  //     const result = solver.checkRowPlacement(req.body.puzzle, req.body.row, req.body.column, req.body.value);
+  //     res.send(result);
+  //   });
 
-  app.route('/api/checkCol')
-    .post((req, res) => {
-      const result = solver.checkColPlacement(req.body.puzzle, req.body.row, req.body.column, req.body.value);
-      res.send(result);
-    })
+  // app.route('/api/checkCol')
+  //   .post((req, res) => {
+  //     const result = solver.checkColPlacement(req.body.puzzle, req.body.row, req.body.column, req.body.value);
+  //     res.send(result);
+  //   })
 
-  app.route('/api/checkReg')
-    .post((req, res) => {
-      const result = solver.checkRegionPlacement(req.body.puzzle, req.body.row, req.body.column, req.body.value);
-      res.send(result);
-    })
+  // app.route('/api/checkReg')
+  //   .post((req, res) => {
+  //     const result = solver.checkRegionPlacement(req.body.puzzle, req.body.row, req.body.column, req.body.value);
+  //     res.send(result);
+  //   })
 };
