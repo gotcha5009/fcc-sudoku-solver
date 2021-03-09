@@ -13,9 +13,9 @@ module.exports = function (app) {
       } else if (!solver.validate(req.body.puzzle).valid) {
         res.json({ error: solver.validate(req.body.puzzle).error });
       } else if (!/^[A-Ia-i][1-9]$/.test(req.body.coordinate)) {
-        res.json({ error: 'invalid coordinate' });
+        res.json({ error: 'Invalid coordinate' });
       } else if (!/[1-9]/.test(req.body.value)) {
-        res.json({ error: 'invalid value' });
+        res.json({ error: 'Invalid value' });
       } else {
         const row = req.body.coordinate.charAt(0).toLowerCase();
         const col = req.body.coordinate.charAt(1);

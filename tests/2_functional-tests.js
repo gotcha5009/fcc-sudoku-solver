@@ -214,7 +214,7 @@ suite('Functional Tests', () => {
             )
             .end(function (err, res) {
                 assert.equal(res.statusCode, 200);
-                assert.equal(res.body.error, 'invalid coordinate');
+                assert.equal(res.body.error, 'Invalid coordinate');
                 done();
             });
     });
@@ -231,7 +231,7 @@ suite('Functional Tests', () => {
             )
             .end(function (err, res) {
                 assert.equal(res.statusCode, 200);
-                assert.equal(res.body.error, 'invalid value');
+                assert.equal(res.body.error, 'Invalid value');
                 done();
             });
     });
