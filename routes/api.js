@@ -17,7 +17,7 @@ module.exports = function (app) {
       } else if (!/[1-9]/.test(req.body.value)) {
         res.json({ error: 'invalid value' });
       } else {
-        const row = req.body.coordinate.charAt(0);
+        const row = req.body.coordinate.charAt(0).toLowerCase();
         const col = req.body.coordinate.charAt(1);
         const rowValid = solver.checkRowPlacement(req.body.puzzle, row, col, req.body.value);
         const colValid = solver.checkColPlacement(req.body.puzzle, row, col, req.body.value);
@@ -42,7 +42,14 @@ module.exports = function (app) {
 
   app.route('/api/solve')
     .post((req, res) => {
-
+      if (req.body.puzzle == '') {
+        res.json({ "error": "Required field missing" });
+      } else if (!solver.validate(req.body.puzzle).valid) {
+        res.json(valid.error);
+      } else {
+        const result = solver.solve(req.body.puzzle);
+        res.json(result);
+      }
     });
 
   app.route('/api/checkValid')

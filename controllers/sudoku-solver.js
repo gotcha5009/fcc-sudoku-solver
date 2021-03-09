@@ -42,7 +42,20 @@ class SudokuSolver {
           myRow += puzzleString[index];
         }
       });
-      return myRow.includes(value) ? false : true;
+      // if (row + column == 'a3') {
+      //   console.log('coordinate:', row + column);
+      //   console.log('value:', value);
+      //   console.log('condition:', puzzleString[this.coordination.indexOf(row + column)] == value &&
+      //     myRow.match(new RegExp(value, 'g')).length == 1);
+      //   console.log(myRow);
+      //   console.log(!myRow.includes(value))
+      // }
+      return (!myRow.includes(value))
+        ? true
+        : (puzzleString[this.coordination.indexOf(row + column)] == value &&
+          myRow.match(new RegExp(value, 'g')).length == 1)
+          ? true
+          : false
 
     } catch (err) {
       throw err;
@@ -57,7 +70,12 @@ class SudokuSolver {
           myColumn += puzzleString[index];
         }
       });
-      return myColumn.includes(value) ? false : true;
+      return (!myColumn.includes(value))
+        ? true
+        : (puzzleString[this.coordination.indexOf(row + column)] == value &&
+          myColumn.match(new RegExp(value, 'g')).length == 1)
+          ? true
+          : false
 
     } catch (err) {
       throw err;
@@ -88,7 +106,12 @@ class SudokuSolver {
         }
       });
       //console.log(myRegion);
-      return myRegion.includes(value) ? false : true;
+      return (!myRegion.includes(value))
+        ? true
+        : (puzzleString[this.coordination.indexOf(row + column)] == value &&
+          myRegion.match(new RegExp(value, 'g')).length == 1)
+          ? true
+          : false
 
     } catch (err) {
       throw err;
@@ -97,7 +120,56 @@ class SudokuSolver {
 
 
   solve(puzzleString) {
+    try {
+      let solutionArray = [...puzzleString];
+      for (let i = 0; i < solutionArray.length; i++) {
+        const coordinate = this.coordination[i];
+        const row = coordinate.charAt(0);
+        const col = coordinate.charAt(1);
+        if (solutionArray[i] == '.') {
+          for (let j = 1; j <= 9; j++) {
+            const rowValid = this.checkRowPlacement(solutionArray.join(''), row, col, j);
+            const colValid = this.checkColPlacement(solutionArray.join(''), row, col, j);
+            const regionValid = this.checkRegionPlacement(solutionArray.join(''), row, col, j);
 
+            // console.log('rowValid:', rowValid);
+            // console.log('colValid:', colValid);
+            // console.log('regionValid:', regionValid);
+
+
+            if (rowValid && colValid && regionValid) {
+              solutionArray[i] = j;
+              break;
+            } else if (j == 9) {
+              // need to backtrack from here
+              // decrease i by 1 until found previous .
+              // then make j choose next solution instead of current solution
+              // if that can't solve it again, redo the steps until we can't increment the first one  
+              console.log(solutionArray);
+              console.log("element:", solutionArray[i], "\n", "index:", i);
+              return { "error": "Puzzle cannot be solved" };
+            } else {
+              continue;
+            }
+          }
+        } else {
+          const rowValid = this.checkRowPlacement(solutionArray.join(''), row, col, solutionArray[i]);
+          const colValid = this.checkColPlacement(solutionArray.join(''), row, col, solutionArray[i]);
+          const regionValid = this.checkRegionPlacement(solutionArray.join(''), row, col, solutionArray[i]);
+
+          if (rowValid && colValid && regionValid) {
+            continue;
+          } else {
+            console.log("element:", solutionArray[i], "\n", "index:", i)
+            return { "error": "Puzzle cannot be solved" };
+          }
+        }
+      }
+      const solutionString = solutionArray.join('');
+      return { solution: solutionString };
+    } catch (err) {
+      throw err;
+    }
   }
 }
 
