@@ -15,7 +15,7 @@ class SudokuSolver {
       if (puzzleString.length != 81) {
         return {
           valid: false,
-          error: "Expected puzzle to be 81 characters long"
+          error: 'Expected puzzle to be 81 characters long'
         };
       } else {
         const regex = /[1-9.]{81}/g;
@@ -26,7 +26,7 @@ class SudokuSolver {
           }
           : {
             valid: false,
-            error: "Invalid characters in puzzle"
+            error: 'Invalid characters in puzzle'
           }
       }
     } catch (err) {
@@ -146,7 +146,7 @@ class SudokuSolver {
               //  so you need to move backward until you find previous solution and increment it by 1
 
               //  everytime you move backward, make sure solutionArray is also in the previous state
-              console.log('backtracking...');
+              //console.log('backtracking...');
               while (i != 0) {
                 i--;
                 if (puzzleString[i] == '.') {
@@ -181,7 +181,7 @@ class SudokuSolver {
           if (rowValid && colValid && regionValid) {
             continue;
           } else {
-            console.log("element:", solutionArray[i], "\n", "index:", i)
+            // console.log("element:", solutionArray[i], "\n", "index:", i)
             return { "error": "Puzzle cannot be solved" };
           }
         }

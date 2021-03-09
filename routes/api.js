@@ -8,10 +8,10 @@ module.exports = function (app) {
 
   app.route('/api/check')
     .post((req, res) => {
-      if (req.body.puzzle == '' || req.body.coordinate == '' || req.body.value == '') {
+      if (req.body.puzzle == '' || req.body.coordinate == '' || req.body.value == '' || req.body.puzzle == undefined || req.body.coordinate == undefined || req.body.value == undefined) {
         res.json({ "error": "Required field(s) missing" });
       } else if (!solver.validate(req.body.puzzle).valid) {
-        res.json(valid.error);
+        res.json({ error: solver.validate(req.body.puzzle).error });
       } else if (!/^[A-Ia-i][1-9]$/.test(req.body.coordinate)) {
         res.json({ error: 'invalid coordinate' });
       } else if (!/[1-9]/.test(req.body.value)) {
@@ -42,10 +42,10 @@ module.exports = function (app) {
 
   app.route('/api/solve')
     .post((req, res) => {
-      if (req.body.puzzle == '') {
-        res.json({ "error": "Required field missing" });
+      if (req.body.puzzle == '' || req.body.puzzle == undefined) {
+        res.json({ "error": 'Required field missing' });
       } else if (!solver.validate(req.body.puzzle).valid) {
-        res.json(valid.error);
+        res.json({ error: solver.validate(req.body.puzzle).error });
       } else {
         const result = solver.solve(req.body.puzzle);
         res.json(result);
